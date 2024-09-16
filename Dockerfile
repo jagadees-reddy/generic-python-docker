@@ -24,6 +24,7 @@ RUN apt-get update && \
 
 # Upgrade pip
 RUN pip install --upgrade pip
+RUN python3 --version
 RUN pip install coverage --no-warn-script-location
 
 WORKDIR ${HOME}
