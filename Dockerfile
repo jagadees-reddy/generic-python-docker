@@ -24,6 +24,7 @@ RUN apt-get update && \
 
 # Upgrade pip
 RUN pip install --upgrade pip
+RUN pip install coverage
 
 WORKDIR ${HOME}
 
