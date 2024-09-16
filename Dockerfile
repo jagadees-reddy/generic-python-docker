@@ -18,7 +18,7 @@ RUN groupadd --gid ${USER_ID} ${GROUP_ID} && \
 # Install necessary packages
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-        gcc && \
+        gcc git && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -33,7 +33,7 @@ RUN pip install -r requirements/test_requirements.txt
 
 # Copy the application code
 COPY python_application/ ${HOME}/${APP_NAME}/python_application/
-COPY setup.py setup.cfg ${HOME}/${APP_NAME}/
+COPY setup.py ${HOME}/${APP_NAME}/
 
 # Copy the tests
 COPY tests/ ${HOME}/${APP_NAME}/tests/
