@@ -1,7 +1,7 @@
-# generic-python-docker/tests/test_application.py
+
 import pytest
 
-from python_application/application.py import App
+from python_application.application.py import App
 
 @pytest.fixture
 def app():
