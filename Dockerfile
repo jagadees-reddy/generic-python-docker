@@ -27,25 +27,28 @@ RUN pip install --upgrade pip
 RUN pip install coverage
 
 # Copy requirements and install them
-COPY requirements/ requirements/
+COPY requirements/ ${HOME}/requirements/
 RUN pip install -r requirements/requirements.txt
 RUN pip install -r requirements/test_requirements.txt
 
 # Copy the application code
 COPY python_application/ ${HOME}/${APP_NAME}/python_application/
 COPY setup.py ${HOME}/${APP_NAME}/
-
-# Copy the README file
 COPY README.md ${HOME}/${APP_NAME}/
 
-# Copy the tests outside the application directory to avoid conflicts
+# Copy the tests
 COPY tests/ ${HOME}/tests/
 
+ENV PYTHONPATH="${PYTHONPATH}:${HOME}/${APP_NAME}"
 ENV PATH $PATH:${HOME}/${APP_NAME}/bin
-WORKDIR ${HOME}/${APP_NAME}
+WORKDIR ${HOME}
 
 # Install the application
-RUN pip install -e .
+RUN pip install -e ${HOME}/${APP_NAME}
+
+# Clean up __pycache__ and .pyc files
+RUN find ${HOME} -name "__pycache__" -exec rm -rf {} + || true
+RUN find ${HOME} -name "*.pyc" -exec rm -f {} + || true
 
 # Change ownership and switch to the non-root user
 RUN chown -R ${USER_ID}:${GROUP_ID} ${HOME}
