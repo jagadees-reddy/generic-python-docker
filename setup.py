@@ -2,7 +2,11 @@
 
 from setuptools import setup, find_packages
 
-readme = open('README.md').read()
+try:
+    with open('README.md', 'r') as f:
+        readme = f.read()
+except FileNotFoundError:
+    readme = ''
 
 setup(
     name='python_application',
