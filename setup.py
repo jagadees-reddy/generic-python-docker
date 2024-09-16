@@ -14,7 +14,7 @@ setup(
     author='Frank Bertsch',
     author_email='frank@mozilla.com',
     url='https://github.com/jagadees-reddy/generic-python-docker',
-    packages=find_packages(include=['python_application']),
+    packages=find_packages(exclude=['tests*']),
     entry_points={
         'console_scripts': [
             'python_application=python_application.__main__:main',
@@ -23,7 +23,7 @@ setup(
     python_requires='>=3.6.0',
     version='0.0.1',
     long_description=readme,
-    include_package_data=True,
+    include_package_data=False,
     install_requires=[
         'click',
     ],
