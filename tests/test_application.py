@@ -1,4 +1,4 @@
-# tests/test_application.py
+# tests/test_app.py
 
 import pytest
 from python_application.application import App
