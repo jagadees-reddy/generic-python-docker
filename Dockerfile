@@ -35,11 +35,11 @@ RUN pip install -r requirements/test_requirements.txt
 COPY python_application/ ${HOME}/${APP_NAME}/python_application/
 COPY setup.py ${HOME}/${APP_NAME}/
 
-# Copy the tests
-COPY tests/ ${HOME}/${APP_NAME}/tests/
-
 # Copy the README file
 COPY README.md ${HOME}/${APP_NAME}/
+
+# Copy the tests outside the application directory to avoid conflicts
+COPY tests/ ${HOME}/tests/
 
 ENV PATH $PATH:${HOME}/${APP_NAME}/bin
 WORKDIR ${HOME}/${APP_NAME}
