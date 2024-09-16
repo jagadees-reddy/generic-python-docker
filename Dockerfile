@@ -38,6 +38,9 @@ COPY setup.py ${HOME}/${APP_NAME}/
 # Copy the tests
 COPY tests/ ${HOME}/${APP_NAME}/tests/
 
+# Copy the README file
+COPY README.md ${HOME}/${APP_NAME}/
+
 ENV PATH $PATH:${HOME}/${APP_NAME}/bin
 WORKDIR ${HOME}/${APP_NAME}
 
@@ -49,4 +52,3 @@ RUN chown -R ${USER_ID}:${GROUP_ID} ${HOME}
 USER ${USER_ID}
 
 ENTRYPOINT ["entrypoint"]
-
