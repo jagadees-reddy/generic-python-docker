@@ -24,7 +24,7 @@ RUN apt-get update && \
 
 # Upgrade pip
 RUN pip install --upgrade pip
-RUN pip install coverage
+RUN pip install coverage --no-warn-script-location
 
 WORKDIR ${HOME}
 
