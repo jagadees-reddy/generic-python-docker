@@ -1,3 +1,5 @@
+# Dockerfile
+
 FROM python:3.8-slim
 LABEL maintainer="Frank Bertsch <frank@mozilla.com>"
 
@@ -30,11 +32,17 @@ RUN pip install -r requirements/requirements.txt
 RUN pip install -r requirements/test_requirements.txt
 
 # Copy the application code
-COPY . ${HOME}/${APP_NAME}
+COPY python_application/ ${HOME}/${APP_NAME}/python_application/
+COPY setup.py setup.cfg ${HOME}/${APP_NAME}/
+
+# Copy the tests
+COPY tests/ ${HOME}/${APP_NAME}/tests/
+
 ENV PATH $PATH:${HOME}/${APP_NAME}/bin
+WORKDIR ${HOME}/${APP_NAME}
 
 # Install the application
-RUN pip install -e ${HOME}/${APP_NAME}
+RUN pip install -e .
 
 # Change ownership and switch to the non-root user
 RUN chown -R ${USER_ID}:${GROUP_ID} ${HOME}
