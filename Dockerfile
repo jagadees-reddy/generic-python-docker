@@ -1,44 +1,42 @@
-FROM python:3
-MAINTAINER Frank Bertsch <frank@mozilla.com>
+FROM python:3.8-slim
+LABEL maintainer="Frank Bertsch <frank@mozilla.com>"
 
-ARG APP_NAME=python-application
+ARG APP_NAME=python_application
 ENV APP_NAME=${APP_NAME}
-
-# Guidelines here: https://github.com/mozilla-services/Dockerflow/blob/master/docs/building-container.md
-ARG USER_ID="10001"
-ARG GROUP_ID="app"
-ARG HOME="/app"
-
-ENV HOME=${HOME}
-RUN groupadd --gid ${USER_ID} ${GROUP_ID} && \
-    useradd --create-home --uid ${USER_ID} --gid ${GROUP_ID} --home-dir /app ${GROUP_ID}
-
-# List packages here
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        file        \
-        gcc         \
-        libwww-perl && \
-    apt-get autoremove -y && \
-    apt-get clean
-
-# Upgrade pip
-RUN pip install --upgrade pip
-RUN python3 --version
-RUN pip install coverage --no-warn-script-location
-
+ENV HOME="/app"
 WORKDIR ${HOME}
 
-ADD requirements requirements/
+# Create a non-root user
+ARG USER_ID="10001"
+ARG GROUP_ID="app"
+
+RUN groupadd --gid ${USER_ID} ${GROUP_ID} && \
+    useradd --create-home --uid ${USER_ID} --gid ${GROUP_ID} --home-dir ${HOME} ${GROUP_ID}
+
+# Install necessary packages
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        gcc && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Upgrade pip and install coverage
+RUN pip install --upgrade pip
+RUN pip install coverage
+
+# Copy requirements and install them
+COPY requirements/ requirements/
 RUN pip install -r requirements/requirements.txt
 RUN pip install -r requirements/test_requirements.txt
 
-ADD . ${HOME}/${APP_NAME}
+# Copy the application code
+COPY . ${HOME}/${APP_NAME}
 ENV PATH $PATH:${HOME}/${APP_NAME}/bin
 
+# Install the application
 RUN pip install -e ${HOME}/${APP_NAME}
 
-# Drop root and change ownership of the application folder to the user
+# Change ownership and switch to the non-root user
 RUN chown -R ${USER_ID}:${GROUP_ID} ${HOME}
 USER ${USER_ID}
 
