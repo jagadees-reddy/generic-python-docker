@@ -30,8 +30,8 @@ RUN pip install -r ${HOME}/requirements/test_requirements.txt
 COPY python_application/ ${HOME}/${APP_NAME}/python_application/
 COPY setup.py ${HOME}/${APP_NAME}/
 COPY README.md ${HOME}/${APP_NAME}/
-RUN pwd && ls -l /harness/generic-python-docker/tests/
-COPY tests/ ${HOME}/tests/  # Ensure this path is correct and the tests directory is in the right place
+RUN pwd && ls -l 
+COPY /harness/generic-python-docker/tests/ ${HOME}/tests/  # Ensure this path is correct and the tests directory is in the right place
 
 ENV PYTHONPATH="${PYTHONPATH}:${HOME}/${APP_NAME}"
 ENV PATH $PATH:${HOME}/${APP_NAME}/bin
