@@ -38,7 +38,7 @@ COPY README.md ${HOME}/${APP_NAME}/
 
 # Copy the tests
 COPY tests/ ${HOME}/generic-python-docker/tests/
-RUN pwd && ls -l && ls -l /tests/
+RUN pwd && ls -l && ls -l /generic-python-docker/tests/
 
 # Set environment variables and working directory
 ENV PYTHONPATH="${PYTHONPATH}:${HOME}/${APP_NAME}:${HOME}/generic-python-docker/tests"
