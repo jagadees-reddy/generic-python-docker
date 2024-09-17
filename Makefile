@@ -51,3 +51,4 @@ stop:
 
 hello-world:
 	docker-compose run app python-application hello-world
+
