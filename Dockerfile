@@ -30,6 +30,7 @@ RUN pip install -r ${HOME}/requirements/test_requirements.txt
 COPY python_application/ ${HOME}/${APP_NAME}/python_application/
 COPY setup.py ${HOME}/${APP_NAME}/
 COPY README.md ${HOME}/${APP_NAME}/
+RUN pwd && ls -l
 COPY tests/ ${HOME}/tests/  # Ensure this path is correct and the tests directory is in the right place
 
 ENV PYTHONPATH="${PYTHONPATH}:${HOME}/${APP_NAME}"
