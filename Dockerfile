@@ -6,7 +6,6 @@ LABEL maintainer="Frank Bertsch <frank@mozilla.com>"
 ARG APP_NAME=python_application
 ENV APP_NAME=${APP_NAME}
 ENV HOME="/app"
-RUN pwd && ls -l
 WORKDIR ${HOME}
 
 ARG USER_ID="10001"
@@ -39,7 +38,7 @@ COPY README.md ${HOME}/${APP_NAME}/
 
 # Copy the tests
 COPY tests/ ${HOME}/generic-python-docker/tests/
-RUN pwd && ls -l && ls -l /generic-python-docker/
+RUN pwd && ls -l && ls -l ${HOME}/generic-python-docker/tests/
 
 # Set environment variables and working directory
 ENV PYTHONPATH="${PYTHONPATH}:${HOME}/${APP_NAME}:${HOME}/generic-python-docker/tests"
@@ -59,4 +58,4 @@ RUN chown -R ${USER_ID}:${GROUP_ID} ${HOME}
 USER ${USER_ID}
 
 # Adjust the entrypoint to run pytest with the correct options
-ENTRYPOINT ["pytest", "--import-mode=importlib", "/app/generic-python-docker/tests"]
+ENTRYPOINT ["pytest", "--rootdir=/app/generic-python-docker/tests", "--import-mode=importlib", "/app/generic-python-docker/tests"]
