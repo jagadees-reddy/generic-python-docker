@@ -38,10 +38,9 @@ COPY README.md ${HOME}/${APP_NAME}/
 
 # Copy the tests
 COPY tests/ ${HOME}/generic-python-docker/tests/
-RUN pwd && ls -l && ls -l ${HOME}/generic-python-docker/tests/
 
 # Set environment variables and working directory
-ENV PYTHONPATH="${PYTHONPATH}:${HOME}/${APP_NAME}:${HOME}/generic-python-docker/tests"
+ENV PYTHONPATH="${PYTHONPATH}:${HOME}/${APP_NAME}"
 ENV PATH $PATH:${HOME}/${APP_NAME}/bin
 
 WORKDIR ${HOME}
@@ -58,4 +57,4 @@ RUN chown -R ${USER_ID}:${GROUP_ID} ${HOME}
 USER ${USER_ID}
 
 # Adjust the entrypoint to run pytest with the correct options
-ENTRYPOINT ["pytest", "--rootdir=/app/generic-python-docker/tests", "--import-mode=importlib", "/app/generic-python-docker/tests"]
+ENTRYPOINT ["pytest", "--import-mode=importlib", "/app/generic-python-docker/tests"]
