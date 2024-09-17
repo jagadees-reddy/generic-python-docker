@@ -13,7 +13,7 @@ ARG GROUP_ID="app"
 
 RUN groupadd --gid ${USER_ID} ${GROUP_ID} && \
     useradd --create-home --uid ${USER_ID} --gid ${GROUP_ID} --home-dir ${HOME} ${GROUP_ID}
-
+RUN pwd && ls -l
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         gcc git && \
