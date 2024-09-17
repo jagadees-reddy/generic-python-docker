@@ -42,7 +42,7 @@ jobs:
           command: docker load -i /cache/docker.tar
       - run:
           name: Test Code
-          command: docker run app:build pytest /app/tests/
+          command: docker run app:build pytest /app/tests/  # Updated path to /app/tests/
       - run:
           name: Lint Code
           command: docker run app:build flake8 python_application
