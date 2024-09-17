@@ -31,7 +31,7 @@ COPY python_application/ ${HOME}/${APP_NAME}/python_application/
 COPY setup.py ${HOME}/${APP_NAME}/
 COPY README.md ${HOME}/${APP_NAME}/
 RUN pwd && ls -l 
-COPY /harness/generic-python-docker/tests ${HOME}/  # Ensure this path is correct and the tests directory is in the right place
+COPY /harness/generic-python-docker/tests/ ${HOME}/tests/ 
 
 ENV PYTHONPATH="${PYTHONPATH}:${HOME}/${APP_NAME}"
 ENV PATH $PATH:${HOME}/${APP_NAME}/bin
