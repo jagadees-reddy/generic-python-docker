@@ -31,7 +31,7 @@ COPY python_application/ ${HOME}/${APP_NAME}/python_application/
 COPY setup.py ${HOME}/${APP_NAME}/
 COPY README.md ${HOME}/${APP_NAME}/
 RUN pwd && ls -l 
-//COPY tests/ ${HOME}/tests/ 
+#COPY tests/ ${HOME}/tests/ 
 COPY tests/ /harness/tests/
 
 ENV PYTHONPATH="${PYTHONPATH}:${HOME}/${APP_NAME}"
