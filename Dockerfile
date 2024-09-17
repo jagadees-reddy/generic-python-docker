@@ -49,8 +49,8 @@ WORKDIR ${HOME}
 RUN pip install -e ${HOME}/${APP_NAME}
 
 # Clean up any __pycache__ and .pyc files
-RUN find ${HOME} -name "__pycache__" -exec rm -rf {} + || true
-RUN find ${HOME} -name "*.pyc" -exec rm -f {} + || true
+#RUN find ${HOME} -name "__pycache__" -exec rm -rf {} + || true
+#RUN find ${HOME} -name "*.pyc" -exec rm -f {} + || true
 
 # Set ownership and switch to the non-root user
 RUN chown -R ${USER_ID}:${GROUP_ID} ${HOME}
