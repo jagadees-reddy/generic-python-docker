@@ -29,4 +29,3 @@ setup(
     ],
     license='Mozilla',
 )
-
