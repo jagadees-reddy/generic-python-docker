@@ -28,8 +28,8 @@ RUN pip install coverage
 
 # Copy requirements and install them
 COPY requirements/ ${HOME}/requirements/
-RUN pip install -r requirements/requirements.txt
-RUN pip install -r requirements/test_requirements.txt
+RUN pip install -r ${HOME}/requirements/requirements.txt
+RUN pip install -r ${HOME}/requirements/test_requirements.txt
 
 # Copy the application code
 COPY python_application/ ${HOME}/${APP_NAME}/python_application/
