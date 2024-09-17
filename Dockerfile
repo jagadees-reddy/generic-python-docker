@@ -36,11 +36,8 @@ COPY python_application/ ${HOME}/${APP_NAME}/python_application/
 COPY setup.py ${HOME}/${APP_NAME}/
 COPY README.md ${HOME}/${APP_NAME}/
 
-# Copy the tests to a consistent directory structure
-COPY tests/ ${HOME}/tests/
-
-# Ensure the test path is correct
-RUN pwd && ls -l ${HOME}/tests/
+# Copy the tests directly to the /harness directory to match pytest expectation
+COPY tests/ /harness/tests/
 
 # Set environment variables and working directory
 ENV PYTHONPATH="${PYTHONPATH}:${HOME}/${APP_NAME}"
@@ -59,5 +56,5 @@ RUN find ${HOME} -name "*.pyc" -exec rm -f {} + || true
 RUN chown -R ${USER_ID}:${GROUP_ID} ${HOME}
 USER ${USER_ID}
 
-# Run pytest with the correct path
-ENTRYPOINT ["pytest", "--import-mode=importlib", "/app/tests"]
+# Adjust the entrypoint to run pytest with the correct options
+ENTRYPOINT ["pytest", "--import-mode=importlib", "/harness/tests"]
