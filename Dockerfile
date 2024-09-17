@@ -6,6 +6,7 @@ LABEL maintainer="Frank Bertsch <frank@mozilla.com>"
 ARG APP_NAME=python_application
 ENV APP_NAME=${APP_NAME}
 ENV HOME="/app"
+RUN pwd && ls -l
 WORKDIR ${HOME}
 
 ARG USER_ID="10001"
@@ -38,7 +39,7 @@ COPY README.md ${HOME}/${APP_NAME}/
 
 # Copy the tests
 COPY tests/ ${HOME}/generic-python-docker/tests/
-RUN pwd && ls -l && ls -l /generic-python-docker/tests/
+RUN pwd && ls -l && ls -l /generic-python-docker/
 
 # Set environment variables and working directory
 ENV PYTHONPATH="${PYTHONPATH}:${HOME}/${APP_NAME}:${HOME}/generic-python-docker/tests"
