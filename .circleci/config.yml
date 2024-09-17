@@ -42,7 +42,7 @@ jobs:
           command: docker load -i /cache/docker.tar
       - run:
           name: Test Code
-          command: docker run app:build pytest /app/generic-python-docker/tests/
+          command: docker run app:build pytest /app/tests/  # Use the correct test path
       - run:
           name: Lint Code
           command: docker run app:build flake8 python_application
