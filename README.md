@@ -17,7 +17,7 @@ If you're going to clone this and start a new project, here's the parts you need
 2. Change the `python_application` directory to the name of your application
 3. The `hello-world` step in `Makefile`. You can simply remove it and use `make run COMMAND="python-application hello-world"`
    (replaced with what your app is called) instead
-4. `application.py` (including the correponding runner in `__main__.py`,
+4. `application.py` (including the corresponding runner in `__main__.py`,
    as well as the test in `tests/test_application.py`, and that test file's name)
 5. `APP_NAME` in `Dockerfile` (line 4)
 6. `setup.py` file (Start at line 17)
@@ -53,23 +53,3 @@ to run the tests locally.
 ### Run tests locally
 
 Install requirements locally:
-```
-python3 -m virtualenv venv
-source venv/bin/activate
-make install-requirements
-```
-
-Run tests locally:
-```
-pytest tests/
-```
-
-### Run tests in docker
-
-You can run the tests just as CI does by building the container
-and running the tests.
-
-```
-make clean && make build
-make test
-```
