@@ -31,8 +31,8 @@ COPY python_application/ ${HOME}/${APP_NAME}/python_application/
 COPY setup.py ${HOME}/${APP_NAME}/
 COPY README.md ${HOME}/${APP_NAME}/
 RUN pwd && ls -l 
-#COPY tests/ ${HOME}/tests/ 
-COPY tests/ /harness/tests/
+COPY tests/ ${HOME}/tests/ 
+#COPY tests/ /harness/tests/
 
 ENV PYTHONPATH="${PYTHONPATH}:${HOME}/${APP_NAME}"
 ENV PATH $PATH:${HOME}/${APP_NAME}/bin
@@ -40,8 +40,8 @@ WORKDIR ${HOME}
 
 RUN pip install -e ${HOME}/${APP_NAME}
 
-RUN find ${HOME} -name "__pycache__" -exec rm -rf {} + || true
-RUN find ${HOME} -name "*.pyc" -exec rm -f {} + || true
+#RUN find ${HOME} -name "__pycache__" -exec rm -rf {} + || true
+#RUN find ${HOME} -name "*.pyc" -exec rm -f {} + || true
 
 RUN chown -R ${USER_ID}:${GROUP_ID} ${HOME}
 USER ${USER_ID}
