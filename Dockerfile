@@ -1,5 +1,3 @@
-# Dockerfile
-
 FROM python:3.8-slim
 LABEL maintainer="Frank Bertsch <frank@mozilla.com>"
 
@@ -42,7 +40,7 @@ RUN mkdir /harness/generic-python-docker
 # Copy the tests to the correct directory
 COPY tests/ /harness/tests/
 
-#Insert this command to inspect the directory structure
+# Insert this command to inspect the directory structure
 RUN ls -R /harness
 
 # Set environment variables and working directory
@@ -63,5 +61,4 @@ RUN chown -R ${USER_ID}:${GROUP_ID} ${HOME}
 USER ${USER_ID}
 
 # Adjust the entrypoint to run pytest with the correct options
-# Using --rootdir to point to the correct directory for pytest discovery
 ENTRYPOINT ["pytest", "--rootdir=/harness/generic-python-docker", "/harness/generic-python-docker/tests"]
