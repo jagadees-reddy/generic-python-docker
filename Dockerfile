@@ -36,6 +36,9 @@ COPY python_application/ ${HOME}/${APP_NAME}/python_application/
 COPY setup.py ${HOME}/${APP_NAME}/
 COPY README.md ${HOME}/${APP_NAME}/
 
+RUN mkdir /harness
+RUN mkdir /harness/generic-python-docker
+
 # Copy the tests to the correct directory
 COPY tests/ /harness/generic-python-docker/tests/
 
