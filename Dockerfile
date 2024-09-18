@@ -36,8 +36,8 @@ COPY python_application/ ${HOME}/${APP_NAME}/python_application/
 COPY setup.py ${HOME}/${APP_NAME}/
 COPY README.md ${HOME}/${APP_NAME}/
 
-# Copy the tests directly to the /harness directory to match pytest expectation
-COPY tests/ /harness/tests/
+# Copy the tests to the correct directory
+COPY tests/ /harness/generic-python-docker/tests/
 
 # Set environment variables and working directory
 ENV PYTHONPATH="${PYTHONPATH}:${HOME}/${APP_NAME}"
@@ -57,4 +57,5 @@ RUN chown -R ${USER_ID}:${GROUP_ID} ${HOME}
 USER ${USER_ID}
 
 # Adjust the entrypoint to run pytest with the correct options
-ENTRYPOINT ["pytest", "--import-mode=importlib", "/harness/tests"]
+# Using --rootdir to point to the correct directory for pytest discovery
+ENTRYPOINT ["pytest", "--rootdir=/harness/generic-python-docker", "/harness/generic-python-docker/tests"]
