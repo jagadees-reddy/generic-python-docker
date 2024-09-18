@@ -30,6 +30,7 @@ RUN pip install coverage
 COPY requirements/ ${HOME}/requirements/
 RUN pip install -r ${HOME}/requirements/requirements.txt
 RUN pip install -r ${HOME}/requirements/test_requirements.txt
+RUN ls -R /harness
 
 # Copy the application code
 COPY python_application/ ${HOME}/${APP_NAME}/python_application/
