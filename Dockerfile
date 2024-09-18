@@ -40,7 +40,7 @@ RUN mkdir /harness
 RUN mkdir /harness/generic-python-docker
 
 # Copy the tests to the correct directory
-COPY tests/ /harness/generic-python-docker/tests/
+COPY tests/ /harness/tests/
 
 #Insert this command to inspect the directory structure
 RUN ls -R /harness
