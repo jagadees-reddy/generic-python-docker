@@ -30,7 +30,6 @@ RUN pip install coverage
 COPY requirements/ ${HOME}/requirements/
 RUN pip install -r ${HOME}/requirements/requirements.txt
 RUN pip install -r ${HOME}/requirements/test_requirements.txt
-RUN ls -R /harness
 
 # Copy the application code
 COPY python_application/ ${HOME}/${APP_NAME}/python_application/
@@ -39,6 +38,9 @@ COPY README.md ${HOME}/${APP_NAME}/
 
 # Copy the tests to the correct directory
 COPY tests/ /harness/generic-python-docker/tests/
+
+#Insert this command to inspect the directory structure
+RUN ls -R /harness
 
 # Set environment variables and working directory
 ENV PYTHONPATH="${PYTHONPATH}:${HOME}/${APP_NAME}"
