@@ -43,6 +43,9 @@ COPY tests/ /harness/tests/
 # Insert this command to inspect the directory structure
 RUN ls -R /harness
 
+# Create cache directory for pytest
+RUN mkdir -p /harness/generic-python-docker/.pytest_cache
+
 # Set environment variables and working directory
 ENV PYTHONPATH="${PYTHONPATH}:${HOME}/${APP_NAME}"
 ENV PATH $PATH:${HOME}/${APP_NAME}/bin
