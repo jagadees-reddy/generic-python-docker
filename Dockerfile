@@ -38,12 +38,12 @@ COPY README.md ${HOME}/${APP_NAME}/
 
 # Create necessary directories in the /harness path
 RUN mkdir -p /harness/generic-python-docker/tests
-RUN mkdir -p /harness/generic-python-docker/test-results  # Added to create test-results directory
+RUN mkdir -p /harness/generic-python-docker/test-results
 
 # Copy the tests to the correct directory
 COPY tests/ /harness/generic-python-docker/tests/
 
-# Verify the directory structure
+# Verify the directory structure and ensure paths are created correctly
 RUN ls -R /harness
 
 # Set environment variables and working directory
@@ -66,3 +66,6 @@ USER ${USER_ID}
 # Adjust the entrypoint to run pytest with the correct options
 # Now includes the option to generate an XML report at /harness/generic-python-docker/test-results/
 ENTRYPOINT ["pytest", "--rootdir=/harness/generic-python-docker", "/harness/generic-python-docker/tests", "--junitxml=/harness/generic-python-docker/test-results/results.xml"]
+
+# Ensure the results file is generated and exists
+RUN ls -R /harness/generic-python-docker/test-results
