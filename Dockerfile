@@ -1,3 +1,5 @@
+# Dockerfile
+
 FROM python:3.8-slim
 LABEL maintainer="Frank Bertsch <frank@mozilla.com>"
 
@@ -34,17 +36,14 @@ COPY python_application/ ${HOME}/${APP_NAME}/python_application/
 COPY setup.py ${HOME}/${APP_NAME}/
 COPY README.md ${HOME}/${APP_NAME}/
 
-RUN mkdir /harness
-RUN mkdir /harness/generic-python-docker
+# Create necessary directories in the /harness path
+RUN mkdir -p /harness/generic-python-docker/tests
 
 # Copy the tests to the correct directory
-COPY tests/ /harness/tests/
+COPY tests/ /harness/generic-python-docker/tests/
 
-# Insert this command to inspect the directory structure
+# Verify the directory structure
 RUN ls -R /harness
-
-# Create cache directory for pytest
-RUN mkdir -p /harness/generic-python-docker/.pytest_cache
 
 # Set environment variables and working directory
 ENV PYTHONPATH="${PYTHONPATH}:${HOME}/${APP_NAME}"
@@ -64,4 +63,5 @@ RUN chown -R ${USER_ID}:${GROUP_ID} ${HOME}
 USER ${USER_ID}
 
 # Adjust the entrypoint to run pytest with the correct options
+# Point pytest to the correct directory
 ENTRYPOINT ["pytest", "--rootdir=/harness/generic-python-docker", "/harness/generic-python-docker/tests"]
