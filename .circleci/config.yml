@@ -6,7 +6,7 @@ jobs:
       - image: docker:stable-git
     working_directory: /dockerflow
     steps:
-      - checkout  # Ensures the repo is cloned in the correct working directory
+      - checkout
       - setup_remote_docker
 
       - run:
@@ -21,7 +21,7 @@ jobs:
 
       - run:
           name: Build Docker image
-          command: docker build -t app:build -f generic-python-docker/Dockerfile .  # Ensure correct Dockerfile path and context
+          command: docker build -t app:build -f generic-python-docker/Dockerfile .
 
       - run:
           name: Save Docker image to cache
@@ -43,7 +43,7 @@ jobs:
           command: docker load -i /cache/docker.tar
       - run:
           name: Test Code
-          command: docker run app:build pytest /harness/generic-python-docker/test-results/results.xml  # Correct path to /harness/tests/
+          command: docker run app:build pytest --rootdir=/harness/generic-python-docker /harness/generic-python-docker/tests
       - run:
           name: Lint Code
           command: docker run app:build flake8 python_application
