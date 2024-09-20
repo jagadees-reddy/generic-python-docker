@@ -38,7 +38,7 @@ COPY README.md ${HOME}/${APP_NAME}/
 
 # Create necessary directories in the /harness path
 RUN mkdir -p /harness/generic-python-docker/tests
-RUN mkdir -p /harness/generic-python-docker/test-results  # Added to create test-results directory
+RUN mkdir -p /harness/generic-python-docker/test-results  # Create the test-results directory
 
 # Copy the tests to the correct directory
 COPY tests/ /harness/generic-python-docker/tests/
