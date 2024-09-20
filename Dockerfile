@@ -27,21 +27,21 @@ RUN pip install --upgrade pip
 RUN pip install coverage
 
 # Copy requirements and install them
-COPY requirements/ ${HOME}/requirements/
+COPY requirements/ ${HOME}/requirements/  # Ensure /requirements exists and has the right files
 RUN pip install -r ${HOME}/requirements/requirements.txt
 RUN pip install -r ${HOME}/requirements/test_requirements.txt
 
 # Copy the application code
-COPY python_application/ ${HOME}/${APP_NAME}/python_application/
-COPY setup.py ${HOME}/${APP_NAME}/
-COPY README.md ${HOME}/${APP_NAME}/
+COPY python_application/ ${HOME}/${APP_NAME}/python_application/  # Ensure /python_application exists
+COPY setup.py ${HOME}/${APP_NAME}/  # Ensure /setup.py exists
+COPY README.md ${HOME}/${APP_NAME}/  # Ensure /README.md exists
 
 # Create necessary directories in the /harness path
 RUN mkdir -p /harness/generic-python-docker/tests
-RUN mkdir -p /harness/generic-python-docker/test-results  # Create the test-results directory
+RUN mkdir -p /harness/generic-python-docker/test-results
 
 # Copy the tests to the correct directory
-COPY tests/ /harness/generic-python-docker/tests/
+COPY tests/ /harness/generic-python-docker/tests/  # Ensure /tests exists
 
 # Verify the directory structure and ensure paths are created correctly
 RUN ls -R /harness
