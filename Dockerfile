@@ -1,5 +1,3 @@
-# Dockerfile
-
 FROM python:3.8-slim
 LABEL maintainer="Frank Bertsch <frank@mozilla.com>"
 
@@ -27,21 +25,21 @@ RUN pip install --upgrade pip
 RUN pip install coverage
 
 # Copy requirements and install them
-COPY requirements/ ${HOME}/requirements/  # Ensure /requirements exists and has the right files
+COPY generic-python-docker/requirements/ ${HOME}/requirements/  # Adjusted path to requirements
 RUN pip install -r ${HOME}/requirements/requirements.txt
 RUN pip install -r ${HOME}/requirements/test_requirements.txt
 
 # Copy the application code
-COPY python_application/ ${HOME}/${APP_NAME}/python_application/  # Ensure /python_application exists
-COPY setup.py ${HOME}/${APP_NAME}/  # Ensure /setup.py exists
-COPY README.md ${HOME}/${APP_NAME}/  # Ensure /README.md exists
+COPY generic-python-docker/python_application/ ${HOME}/${APP_NAME}/python_application/  # Adjusted path to python_application
+COPY generic-python-docker/setup.py ${HOME}/${APP_NAME}/  # Adjusted path to setup.py
+COPY generic-python-docker/README.md ${HOME}/${APP_NAME}/  # Adjusted path to README.md
 
 # Create necessary directories in the /harness path
 RUN mkdir -p /harness/generic-python-docker/tests
 RUN mkdir -p /harness/generic-python-docker/test-results
 
 # Copy the tests to the correct directory
-COPY tests/ /harness/generic-python-docker/tests/  # Ensure /tests exists
+COPY generic-python-docker/tests/ /harness/generic-python-docker/tests/  # Adjusted path to tests
 
 # Verify the directory structure and ensure paths are created correctly
 RUN ls -R /harness
