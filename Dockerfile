@@ -24,7 +24,7 @@ RUN apt-get update && \
 
 # Upgrade pip and install coverage
 RUN pip install --upgrade pip
-RUN pip install coverage
+RUN pip install coverage pytest  # Ensure pytest is installed here
 
 # Copy requirements and install them
 COPY generic-python-docker/requirements/ ${HOME}/requirements/
@@ -32,7 +32,7 @@ RUN pip install -r ${HOME}/requirements/requirements.txt
 RUN pip install -r ${HOME}/requirements/test_requirements.txt
 
 # Explicitly check if pytest is installed
-RUN pytest --version || echo "pytest is not installed!"
+RUN pytest --version || echo "pytest is not installed!"  # This will stop if pytest is not installed.
 
 # Copy the application code
 COPY generic-python-docker/python_application/ ${HOME}/${APP_NAME}/python_application/
