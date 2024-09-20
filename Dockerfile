@@ -65,7 +65,7 @@ USER ${USER_ID}
 
 # Adjust the entrypoint to run pytest with the correct options
 # Now includes the option to generate an XML report at /harness/generic-python-docker/tests/test-results/
-ENTRYPOINT ["pytest", "--rootdir=/harness/generic-python-docker", "/harness/generic-python-docker/tests", "--junitxml=/harness/generic-python-docker/test-results/results.xml"]
+ENTRYPOINT ["pytest", "--rootdir=/harness/generic-python-docker", "/harness/generic-python-docker/tests", "--junitxml=/harness/generic-python-docker/tests/test-results/results.xml"]
 
 # Ensure the results file is generated and exists
-RUN ls -R /harness/generic-python-docker/test-results
+RUN ls -R /harness/generic-python-docker/tests/test-results
