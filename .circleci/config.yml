@@ -42,7 +42,7 @@ jobs:
           command: docker load -i /cache/docker.tar
       - run:
           name: Test Code
-          command: docker run app:build pytest /harness/generic-python-docker/test-results/results.xml  # Correct path to /harness/tests/
+          command: docker run app:build pytest /harness/generic-python-docker/tests --junitxml=/harness/generic-python-docker/test-results/results.xml  
       - run:
           name: Lint Code
           command: docker run app:build flake8 python_application
