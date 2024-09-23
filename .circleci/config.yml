@@ -46,7 +46,7 @@ jobs:
           command: docker run app:build pytest --rootdir=/harness/generic-python-docker /harness/generic-python-docker/tests
       - run:
           name: Lint Code
-          command: docker run app:build flake8 python_application
+          command: docker run app:build pytest python_application
 
   deploy:
     docker:
