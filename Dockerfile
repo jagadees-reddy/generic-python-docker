@@ -24,15 +24,12 @@ RUN apt-get update && \
 
 # Upgrade pip and install coverage and Pytest
 RUN pip install --upgrade pip
-RUN pip install coverage Pytest  # Ensure Pytest is installed here with a capital P
+RUN pip install coverage pytest  # Ensure pytest is installed here with a lowercase "p"
 
 # Copy requirements and install them
 COPY generic-python-docker/requirements/ ${HOME}/requirements/
 RUN pip install -r ${HOME}/requirements/requirements.txt
 RUN pip install -r ${HOME}/requirements/test_requirements.txt
-
-# Explicitly check if Pytest is installed
-RUN Pytest --version || echo "Pytest is not installed!"  # Ensure Pytest is installed.
 
 # Copy the application code
 COPY generic-python-docker/python_application/ ${HOME}/${APP_NAME}/python_application/
@@ -43,11 +40,10 @@ COPY generic-python-docker/README.md ${HOME}/${APP_NAME}/
 RUN mkdir -p /harness/generic-python-docker/tests
 RUN mkdir -p /harness/generic-python-docker/test-results
 
-# Set permissions for the /harness path (important to ensure write access)
+# Set permissions for the /harness path before switching to the non-root user
 RUN chown -R ${USER_ID}:${GROUP_ID} /harness/generic-python-docker
 RUN chmod -R 777 /harness/generic-python-docker/tests
-RUN chmod -R 777 /harness/generic-python-docker/tests/test_app.py
-RUN chmod -R 777 /harness/generic-python-docker/test-results  # Ensure the test-results folder is fully writable
+RUN chmod -R 777 /harness/generic-python-docker/test-results
 
 # Copy the tests to the correct directory
 COPY generic-python-docker/tests/ /harness/generic-python-docker/tests/
@@ -68,11 +64,14 @@ RUN pip install -e ${HOME}/${APP_NAME}
 RUN find ${HOME} -name "__pycache__" -exec rm -rf {} + || true
 RUN find ${HOME} -name "*.pyc" -exec rm -f {} + || true
 
+# Ensure permissions for the non-root user before switching
+RUN chown -R ${USER_ID}:${GROUP_ID} /harness
+
 # Set ownership and switch to the non-root user
 USER ${USER_ID}
 
-# Adjust the entrypoint to run Pytest with the correct options
-ENTRYPOINT ["Pytest", "--rootdir=/harness/generic-python-docker", "/harness/generic-python-docker/tests", "--junitxml=/harness/generic-python-docker/test-results/results.xml"]
+# Adjust the entrypoint to run pytest with the correct options
+ENTRYPOINT ["pytest", "--rootdir=/harness/generic-python-docker", "/harness/generic-python-docker/tests", "--junitxml=/harness/generic-python-docker/test-results/results.xml"]
 
 # Ensure the results file is generated and exists
 RUN ls -R /harness/generic-python-docker/test-results
