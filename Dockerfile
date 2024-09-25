@@ -31,8 +31,8 @@ COPY generic-python-docker/requirements/ ${HOME}/requirements/
 RUN pip install -r ${HOME}/requirements/requirements.txt
 RUN pip install -r ${HOME}/requirements/test_requirements.txt
 
-# Check if pytest is installed
-RUN pytest --version || echo "pytest is not installed!"
+# Explicitly check if pytest is installed
+RUN pytest --version || echo "pytest is not installed!"  # This will stop if pytest is not installed.
 
 # Copy the application code
 COPY generic-python-docker/python_application/ ${HOME}/${APP_NAME}/python_application/
@@ -43,9 +43,9 @@ COPY generic-python-docker/README.md ${HOME}/${APP_NAME}/
 RUN mkdir -p /harness/generic-python-docker/tests
 RUN mkdir -p /harness/generic-python-docker/test-results
 
-# Set correct permissions for the test-results directory
-RUN chown -R ${USER_ID}:${GROUP_ID} /harness/generic-python-docker/test-results
-RUN chmod -R 777 /harness/generic-python-docker/test-results  # Ensure write permissions for non-root user
+# Ensure correct ownership and permissions for the /harness path
+RUN chown -R ${USER_ID}:${GROUP_ID} /harness/generic-python-docker
+RUN chmod -R 777 /harness/generic-python-docker  # Ensure write permissions for all users
 
 # Copy the tests to the correct directory
 COPY generic-python-docker/tests/ /harness/generic-python-docker/tests/
@@ -66,8 +66,7 @@ RUN pip install -e ${HOME}/${APP_NAME}
 RUN find ${HOME} -name "__pycache__" -exec rm -rf {} + || true
 RUN find ${HOME} -name "*.pyc" -exec rm -f {} + || true
 
-# Set ownership and switch to the non-root user
-RUN chown -R ${USER_ID}:${GROUP_ID} ${HOME}
+# Set ownership and switch to the non-root user (note we set ownership earlier)
 USER ${USER_ID}
 
 # Adjust the entrypoint to run pytest with the correct options
