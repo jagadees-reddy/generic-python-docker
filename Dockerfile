@@ -41,6 +41,7 @@ RUN mkdir -p /harness/generic-python-docker/tests
 RUN mkdir -p /harness/generic-python-docker/test-results
 
 # Ensure the /harness path is writable for the non-root user
+# Apply ownership and permissions before switching users
 RUN chown -R ${USER_ID}:${GROUP_ID} /harness/generic-python-docker
 RUN chmod -R 777 /harness/generic-python-docker
 
@@ -62,6 +63,10 @@ RUN pip install -e ${HOME}/${APP_NAME}
 # Clean up any __pycache__ and .pyc files
 RUN find ${HOME} -name "__pycache__" -exec rm -rf {} + || true
 RUN find ${HOME} -name "*.pyc" -exec rm -f {} + || true
+
+# Ensure permissions for /harness are correct (before switching users)
+RUN chown -R ${USER_ID}:${GROUP_ID} /harness/generic-python-docker
+RUN chmod -R 777 /harness/generic-python-docker
 
 # Set ownership and switch to the non-root user
 USER ${USER_ID}
