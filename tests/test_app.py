@@ -1,6 +1,6 @@
 # tests/test_app.py
 
-import Pytest
+import pytest
 from python_application.application import App
 
 @pytest.fixture
