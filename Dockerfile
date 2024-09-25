@@ -22,9 +22,9 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Upgrade pip and install coverage and Pytest
+# Upgrade pip and install coverage and pytest
 RUN pip install --upgrade pip
-RUN pip install coverage pytest  # Ensure pytest is installed here with a lowercase "p"
+RUN pip install coverage pytest
 
 # Copy requirements and install them
 COPY generic-python-docker/requirements/ ${HOME}/requirements/
@@ -40,15 +40,14 @@ COPY generic-python-docker/README.md ${HOME}/${APP_NAME}/
 RUN mkdir -p /harness/generic-python-docker/tests
 RUN mkdir -p /harness/generic-python-docker/test-results
 
-# Set permissions for the /harness path before switching to the non-root user
+# Ensure the /harness path is writable for the non-root user
 RUN chown -R ${USER_ID}:${GROUP_ID} /harness/generic-python-docker
-RUN chmod -R 777 /harness/generic-python-docker/tests
-RUN chmod -R 777 /harness/generic-python-docker/test-results
+RUN chmod -R 777 /harness/generic-python-docker
 
 # Copy the tests to the correct directory
 COPY generic-python-docker/tests/ /harness/generic-python-docker/tests/
 
-# Verify the directory structure and ensure paths are created correctly
+# Verify the directory structure
 RUN ls -R /harness
 
 # Set environment variables and working directory
@@ -63,9 +62,6 @@ RUN pip install -e ${HOME}/${APP_NAME}
 # Clean up any __pycache__ and .pyc files
 RUN find ${HOME} -name "__pycache__" -exec rm -rf {} + || true
 RUN find ${HOME} -name "*.pyc" -exec rm -f {} + || true
-
-# Ensure permissions for the non-root user before switching
-RUN chown -R ${USER_ID}:${GROUP_ID} /harness
 
 # Set ownership and switch to the non-root user
 USER ${USER_ID}
