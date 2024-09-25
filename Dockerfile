@@ -27,14 +27,14 @@ RUN pip install --upgrade pip
 RUN pip install coverage pytest
 
 # Copy requirements and install them
-COPY generic-python-docker/requirements/ ${HOME}/requirements/
+COPY requirements/ ${HOME}/requirements/
 RUN pip install -r ${HOME}/requirements/requirements.txt
 RUN pip install -r ${HOME}/requirements/test_requirements.txt
 
 # Copy the application code
-COPY generic-python-docker/python_application/ ${HOME}/${APP_NAME}/python_application/
-COPY generic-python-docker/setup.py ${HOME}/${APP_NAME}/
-COPY generic-python-docker/README.md ${HOME}/${APP_NAME}/
+COPY python_application/ ${HOME}/${APP_NAME}/python_application/
+COPY setup.py ${HOME}/${APP_NAME}/
+COPY README.md ${HOME}/${APP_NAME}/
 
 # Create necessary directories in the /harness path
 RUN mkdir -p /harness/generic-python-docker/tests
@@ -45,7 +45,7 @@ RUN chown -R ${USER_ID}:${GROUP_ID} /harness/generic-python-docker
 RUN chmod -R 777 /harness/generic-python-docker
 
 # Copy the tests to the correct directory
-COPY generic-python-docker/tests/ /harness/generic-python-docker/tests/
+COPY tests/ /harness/generic-python-docker/tests/
 
 # Verify the directory structure
 RUN ls -R /harness
