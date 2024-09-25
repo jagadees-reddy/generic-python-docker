@@ -45,6 +45,8 @@ RUN mkdir -p /harness/generic-python-docker/test-results
 
 # Set permissions for the /harness path (important to ensure write access)
 RUN chown -R ${USER_ID}:${GROUP_ID} /harness/generic-python-docker
+RUN chmod -R 777 /harness/generic-python-docker/tests
+RUN chmod -R 777 /harness/generic-python-docker/tests/test_app.py
 RUN chmod -R 777 /harness/generic-python-docker/test-results  # Ensure the test-results folder is fully writable
 
 # Copy the tests to the correct directory
