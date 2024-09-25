@@ -22,7 +22,7 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Upgrade pip and install coverage
+# Upgrade pip and install coverage and pytest
 RUN pip install --upgrade pip
 RUN pip install coverage pytest  # Ensure pytest is installed here
 
@@ -31,8 +31,8 @@ COPY generic-python-docker/requirements/ ${HOME}/requirements/
 RUN pip install -r ${HOME}/requirements/requirements.txt
 RUN pip install -r ${HOME}/requirements/test_requirements.txt
 
-# Explicitly check if pytest is installed
-RUN pytest --version || echo "pytest is not installed!"  # This will stop if pytest is not installed.
+# Check if pytest is installed
+RUN pytest --version || echo "pytest is not installed!"
 
 # Copy the application code
 COPY generic-python-docker/python_application/ ${HOME}/${APP_NAME}/python_application/
@@ -42,6 +42,10 @@ COPY generic-python-docker/README.md ${HOME}/${APP_NAME}/
 # Create necessary directories in the /harness path
 RUN mkdir -p /harness/generic-python-docker/tests
 RUN mkdir -p /harness/generic-python-docker/test-results
+
+# Set correct permissions for the test-results directory
+RUN chown -R ${USER_ID}:${GROUP_ID} /harness/generic-python-docker/test-results
+RUN chmod -R 777 /harness/generic-python-docker/test-results  # Ensure write permissions for non-root user
 
 # Copy the tests to the correct directory
 COPY generic-python-docker/tests/ /harness/generic-python-docker/tests/
