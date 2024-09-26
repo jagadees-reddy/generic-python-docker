@@ -40,7 +40,8 @@ COPY README.md ${HOME}/${APP_NAME}/
 RUN mkdir -p /harness/generic-python-docker/tests
 RUN mkdir -p /harness/generic-python-docker/test-results
 
-# Apply permissions to the /harness path
+# Set permissions for the /harness directory
+RUN chown -R ${USER_ID}:${GROUP_ID} /harness
 RUN chmod -R 777 /harness/generic-python-docker/test-results
 
 # Copy the tests to the correct directory
