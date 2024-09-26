@@ -40,10 +40,8 @@ COPY README.md ${HOME}/${APP_NAME}/
 RUN mkdir -p /harness/generic-python-docker/tests
 RUN mkdir -p /harness/generic-python-docker/test-results
 
-# Ensure the /harness path is writable for the non-root user
-# Apply ownership and permissions before switching users
-RUN chown -R ${USER_ID}:${GROUP_ID} /harness/generic-python-docker
-RUN chmod -R 777 /harness/generic-python-docker
+# Apply permissions to the /harness path
+RUN chmod -R 777 /harness/generic-python-docker/test-results
 
 # Copy the tests to the correct directory
 COPY tests/ /harness/generic-python-docker/tests/
@@ -64,9 +62,8 @@ RUN pip install -e ${HOME}/${APP_NAME}
 RUN find ${HOME} -name "__pycache__" -exec rm -rf {} + || true
 RUN find ${HOME} -name "*.pyc" -exec rm -f {} + || true
 
-# Ensure permissions for /harness are correct (before switching users)
-RUN chown -R ${USER_ID}:${GROUP_ID} /harness/generic-python-docker/test-results
-RUN chmod -R 777 /harness/generic-python-docker/test-results
+# Set ownership and switch to the non-root user
+USER ${USER_ID}
 
 # Adjust the entrypoint to run pytest with the correct options
 ENTRYPOINT ["pytest", "--rootdir=/harness/generic-python-docker", "/harness/generic-python-docker/tests", "--junitxml=/harness/generic-python-docker/test-results/results.xml"]
