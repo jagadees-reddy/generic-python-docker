@@ -65,8 +65,8 @@ RUN find ${HOME} -name "__pycache__" -exec rm -rf {} + || true
 RUN find ${HOME} -name "*.pyc" -exec rm -f {} + || true
 
 # Ensure permissions for /harness are correct (before switching users)
-RUN chown -R ${USER_ID}:${GROUP_ID} /harness/generic-python-docker
-RUN chmod -R 777 /harness/generic-python-docker
+RUN chown -R ${USER_ID}:${GROUP_ID} /harness/generic-python-docker/test-results
+RUN chmod -R 777 /harness/generic-python-docker/test-results
 
 # Set ownership and switch to the non-root user
 USER ${USER_ID}
