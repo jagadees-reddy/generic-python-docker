@@ -68,9 +68,6 @@ RUN find ${HOME} -name "*.pyc" -exec rm -f {} + || true
 RUN chown -R ${USER_ID}:${GROUP_ID} /harness/generic-python-docker/test-results
 RUN chmod -R 777 /harness/generic-python-docker/test-results
 
-# Set ownership and switch to the non-root user
-USER ${USER_ID}
-
 # Adjust the entrypoint to run pytest with the correct options
 ENTRYPOINT ["pytest", "--rootdir=/harness/generic-python-docker", "/harness/generic-python-docker/tests", "--junitxml=/harness/generic-python-docker/test-results/results.xml"]
 
