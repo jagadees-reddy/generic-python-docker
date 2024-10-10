@@ -1,5 +1,4 @@
 # Dockerfile
-
 FROM python:3.8-slim
 LABEL maintainer="Frank Bertsch <frank@mozilla.com>"
 
@@ -36,22 +35,19 @@ COPY python_application/ ${HOME}/${APP_NAME}/python_application/
 COPY setup.py ${HOME}/${APP_NAME}/
 COPY README.md ${HOME}/${APP_NAME}/
 
-# Create necessary directories in the /harness path
-RUN mkdir -p /harness/generic-python-docker/tests
-RUN mkdir -p /harness/generic-python-docker/test-results
-
-# Apply permissions to the /harness path
-RUN chmod -R 777 /harness/generic-python-docker
-
-# Set permissions for the /harness directory
-RUN chown -R ${USER_ID}:${GROUP_ID} /harness
-RUN chmod -R 777 /harness/generic-python-docker/test-results
+# Create necessary directories in the /harness path and apply permissions
+RUN mkdir -p /harness/generic-python-docker/tests \
+    /harness/generic-python-docker/test-results && \
+    chmod -R 777 /harness/generic-python-docker && \
+    chown -R ${USER_ID}:${GROUP_ID} /harness/generic-python-docker
 
 # Copy the tests to the correct directory
 COPY tests/ /harness/generic-python-docker/tests/
 
-# Verify the directory structure
-RUN ls -R /harness
+# Final permissions check to ensure correct settings
+RUN chmod -R 777 /harness/generic-python-docker/test-results && \
+    chown -R ${USER_ID}:${GROUP_ID} /harness/generic-python-docker/test-results && \
+    ls -ld /harness/generic-python-docker/test-results
 
 # Set environment variables and working directory
 ENV PYTHONPATH="${PYTHONPATH}:${HOME}/${APP_NAME}"
@@ -68,6 +64,3 @@ RUN find ${HOME} -name "*.pyc" -exec rm -f {} + || true
 
 # Adjust the entrypoint to run pytest with the correct options
 ENTRYPOINT ["pytest", "--rootdir=/harness/generic-python-docker", "/harness/generic-python-docker/tests", "--junitxml=/harness/generic-python-docker/test-results/results.xml"]
-
-# Ensure the results file is generated and exists
-RUN ls -R /harness/generic-python-docker/test-results
