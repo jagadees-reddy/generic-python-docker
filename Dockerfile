@@ -7,13 +7,10 @@ ENV APP_NAME=${APP_NAME}
 ENV HOME="/app"
 WORKDIR ${HOME}
 
-# Set explicit UID and GID values for the non-root user
-ARG USER_ID="10001"
-ARG GROUP_ID="10001"
-
-# Create a group and a non-root user with the specified UID and GID
-RUN groupadd -g ${GROUP_ID} app && \
-    useradd -m -u ${USER_ID} -g ${GROUP_ID} -d ${HOME} app
+# Remove /app if it exists, then create a non-root user and group
+RUN rm -rf /app && \
+    groupadd -g 10001 app && \
+    useradd -m -u 10001 -g 10001 -d /app app
 
 # Install necessary packages
 RUN apt-get update && \
@@ -25,7 +22,7 @@ RUN apt-get update && \
 # Switch to the non-root user to configure Git
 USER app
 
-# Configure global Git settings for the app user to prevent permission issues
+# Configure global Git settings for the app user
 RUN git config --global user.email "you@example.com" && \
     git config --global user.name "Your Name" && \
     git config --global --add safe.directory "*"
@@ -49,7 +46,7 @@ COPY README.md ${HOME}/${APP_NAME}/
 
 # Create necessary directories in the /harness path and apply permissions
 RUN mkdir -p /harness/generic-python-docker/tests /harness/generic-python-docker/test-results && \
-    chown -R ${USER_ID}:${GROUP_ID} /harness/generic-python-docker && \
+    chown -R 10001:10001 /harness/generic-python-docker && \
     chmod -R 777 /harness/generic-python-docker
 
 # Copy the tests to the correct directory
@@ -71,5 +68,5 @@ RUN find ${HOME} -name "*.pyc" -exec rm -f {} + || true
 # Switch to non-root user for final runtime
 USER app
 
-# Adjust the entrypoint to run pytest with the correct options
+# Set entrypoint to run pytest with appropriate options
 ENTRYPOINT ["pytest", "--rootdir=/harness/generic-python-docker", "/harness/generic-python-docker/tests", "--junitxml=/harness/generic-python-docker/test-results/results.xml"]
