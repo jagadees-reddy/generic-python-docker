@@ -19,7 +19,7 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Configure Git globally for the root user to avoid permission issues
+# Configure Git for the root user to avoid permission issues when running commands
 RUN git config --global user.email "you@example.com" && \
     git config --global user.name "Your Name" && \
     git config --global --add safe.directory "*"
@@ -38,7 +38,7 @@ COPY python_application/ ${HOME}/${APP_NAME}/python_application/
 COPY setup.py ${HOME}/${APP_NAME}/
 COPY README.md ${HOME}/${APP_NAME}/
 
-# Create necessary directories in /harness path and apply permissions for the app user
+# Create necessary directories in the /harness path, apply permissions for the app user, and ensure permissions do not require modification
 RUN mkdir -p /harness/generic-python-docker/tests /harness/generic-python-docker/test-results && \
     chown -R app:app /harness/generic-python-docker && \
     chmod -R 777 /harness/generic-python-docker
