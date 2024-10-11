@@ -4,13 +4,12 @@ LABEL maintainer="Frank Bertsch <frank@mozilla.com>"
 
 ARG APP_NAME=python_application
 ENV APP_NAME=${APP_NAME}
-ENV HOME="/app"
+ENV HOME="/home/app"  # Set an alternative home directory
 WORKDIR ${HOME}
 
-# Remove /app if it exists, then create a non-root user and group
-RUN rm -rf /app && \
-    groupadd -g 10001 app && \
-    useradd -m -u 10001 -g 10001 -d /app app
+# Create a non-root user and group with /home/app as the home directory
+RUN groupadd -g 10001 app && \
+    useradd -m -u 10001 -g 10001 -d /home/app app
 
 # Install necessary packages
 RUN apt-get update && \
