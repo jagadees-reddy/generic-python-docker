@@ -22,17 +22,6 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Switch to the non-root user to configure Git
-USER app
-
-# Configure global Git settings for the app user to prevent permission issues
-RUN git config --global user.email "you@example.com" && \
-    git config --global user.name "Your Name" && \
-    git config --global --add safe.directory "*"
-
-# Switch back to root for further setup
-USER root
-
 # Upgrade pip and install coverage and pytest
 RUN pip install --upgrade pip
 RUN pip install coverage pytest
@@ -55,6 +44,11 @@ RUN mkdir -p /harness/generic-python-docker/tests /harness/generic-python-docker
 # Copy the tests to the correct directory
 COPY tests/ /harness/generic-python-docker/tests/
 
+# Final permissions check for test-results
+RUN chown -R ${USER_ID}:${GROUP_ID} /harness/generic-python-docker/test-results && \
+    chmod -R 777 /harness/generic-python-docker/test-results && \
+    ls -ld /harness/generic-python-docker/test-results
+
 # Set environment variables and working directory
 ENV PYTHONPATH="${PYTHONPATH}:${HOME}/${APP_NAME}"
 ENV PATH $PATH:${HOME}/${APP_NAME}/bin
@@ -68,7 +62,7 @@ RUN pip install -e ${HOME}/${APP_NAME}
 RUN find ${HOME} -name "__pycache__" -exec rm -rf {} + || true
 RUN find ${HOME} -name "*.pyc" -exec rm -f {} + || true
 
-# Switch to non-root user for final runtime
+# Switch to non-root user
 USER app
 
 # Adjust the entrypoint to run pytest with the correct options
