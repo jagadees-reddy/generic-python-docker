@@ -10,6 +10,10 @@ WORKDIR ${HOME}
 ARG USER_ID="10001"
 ARG GROUP_ID="app"
 
+# Create a non-root user and group
+RUN groupadd --gid ${USER_ID} ${GROUP_ID} && \
+    useradd --create-home --uid ${USER_ID} --gid ${GROUP_ID} --home-dir ${HOME} ${GROUP_ID}
+
 # Install necessary packages
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -38,15 +42,13 @@ RUN mkdir -p /harness/generic-python-docker/tests \
     chown -R ${USER_ID}:${GROUP_ID} /harness/generic-python-docker
 
 # Apply permissions specifically to /harness/generic-python-docker/test-results
-RUN mkdir -p /harness/generic-python-docker/test-results && \
-    chown -R 10001:app /harness/generic-python-docker/test-results
+RUN chown -R ${USER_ID}:${GROUP_ID} /harness/generic-python-docker/test-results
 
 # Copy the tests to the correct directory
 COPY tests/ /harness/generic-python-docker/tests/
 
 # Final permissions check to ensure correct settings
 RUN chmod -R 777 /harness/generic-python-docker/test-results && \
-    chown -R ${USER_ID}:${GROUP_ID} /harness/generic-python-docker/test-results && \
     ls -ld /harness/generic-python-docker/test-results
 
 # Set environment variables and working directory
