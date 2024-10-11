@@ -19,16 +19,10 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Switch to the non-root user to configure Git
-USER app
-
-# Configure global Git settings for the app user
+# Configure Git globally for the root user to avoid permission issues
 RUN git config --global user.email "you@example.com" && \
     git config --global user.name "Your Name" && \
     git config --global --add safe.directory "*"
-
-# Switch back to root for further setup
-USER root
 
 # Upgrade pip and install coverage and pytest
 RUN pip install --upgrade pip
@@ -44,9 +38,9 @@ COPY python_application/ ${HOME}/${APP_NAME}/python_application/
 COPY setup.py ${HOME}/${APP_NAME}/
 COPY README.md ${HOME}/${APP_NAME}/
 
-# Create necessary directories in the /harness path and apply permissions
+# Create necessary directories in /harness path and apply permissions for the app user
 RUN mkdir -p /harness/generic-python-docker/tests /harness/generic-python-docker/test-results && \
-    chown -R 10001:10001 /harness/generic-python-docker && \
+    chown -R app:app /harness/generic-python-docker && \
     chmod -R 777 /harness/generic-python-docker
 
 # Copy the tests to the correct directory
