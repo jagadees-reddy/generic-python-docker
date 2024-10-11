@@ -41,6 +41,10 @@ RUN mkdir -p /harness/generic-python-docker/tests \
     chmod -R 777 /harness/generic-python-docker && \
     chown -R ${USER_ID}:${GROUP_ID} /harness/generic-python-docker
 
+# Apply permissions specifically to /harness/generic-python-docker/test-results
+RUN mkdir -p /harness/generic-python-docker/test-results && \
+    chown -R 10001:app /harness/generic-python-docker/test-results
+
 # Copy the tests to the correct directory
 COPY tests/ /harness/generic-python-docker/tests/
 
