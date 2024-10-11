@@ -10,10 +10,6 @@ WORKDIR ${HOME}
 ARG USER_ID="10001"
 ARG GROUP_ID="app"
 
-# Create a non-root user
-RUN groupadd --gid ${USER_ID} ${GROUP_ID} && \
-    useradd --create-home --uid ${USER_ID} --gid ${GROUP_ID} --home-dir ${HOME} ${GROUP_ID}
-
 # Install necessary packages
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
