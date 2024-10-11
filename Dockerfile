@@ -62,5 +62,8 @@ RUN pip install -e ${HOME}/${APP_NAME}
 RUN find ${HOME} -name "__pycache__" -exec rm -rf {} + || true
 RUN find ${HOME} -name "*.pyc" -exec rm -f {} + || true
 
+# Switch to non-root user
+USER app
+
 # Adjust the entrypoint to run pytest with the correct options
 ENTRYPOINT ["pytest", "--rootdir=/harness/generic-python-docker", "/harness/generic-python-docker/tests", "--junitxml=/harness/generic-python-docker/test-results/results.xml"]
