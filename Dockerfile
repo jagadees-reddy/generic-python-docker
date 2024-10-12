@@ -19,7 +19,7 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Configure Git for the root user to avoid permission issues when running commands
+# Configure Git for the root user to avoid permission issues
 RUN git config --global user.email "you@example.com" && \
     git config --global user.name "Your Name" && \
     git config --global --add safe.directory "*"
@@ -38,7 +38,7 @@ COPY python_application/ ${HOME}/${APP_NAME}/python_application/
 COPY setup.py ${HOME}/${APP_NAME}/
 COPY README.md ${HOME}/${APP_NAME}/
 
-# Create necessary directories in the /harness path, apply permissions for the app user, and ensure permissions do not require modification
+# Create necessary directories in the /harness path and apply permissions
 RUN mkdir -p /harness/generic-python-docker/tests /harness/generic-python-docker/test-results && \
     chown -R app:app /harness/generic-python-docker && \
     chmod -R 777 /harness/generic-python-docker
@@ -58,6 +58,10 @@ RUN pip install -e ${HOME}/${APP_NAME}
 # Clean up any __pycache__ and .pyc files
 RUN find ${HOME} -name "__pycache__" -exec rm -rf {} + || true
 RUN find ${HOME} -name "*.pyc" -exec rm -f {} + || true
+
+# Double-check permissions for /harness directories to ensure app user access
+RUN chown -R app:app /harness/generic-python-docker/test-results && \
+    chmod -R 777 /harness/generic-python-docker/test-results
 
 # Switch to non-root user for final runtime
 USER app
