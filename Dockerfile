@@ -38,7 +38,7 @@ COPY python_application/ ${HOME}/${APP_NAME}/python_application/
 COPY setup.py ${HOME}/${APP_NAME}/
 COPY README.md ${HOME}/${APP_NAME}/
 
-# Step 7: Create necessary directories in the /harness path and set permissions
+# Step 7: Create and set permissions for /harness directories
 RUN mkdir -p /harness/generic-python-docker/tests /harness/generic-python-docker/test-results && \
     chown -R app:app /harness && \
     chmod -R 777 /harness
@@ -59,10 +59,13 @@ RUN pip install -e ${HOME}/${APP_NAME}
 RUN find ${HOME} -name "__pycache__" -exec rm -rf {} + || true
 RUN find ${HOME} -name "*.pyc" -exec rm -f {} + || true
 
-# Final permission check: confirm write access to /harness/generic-python-docker/test-results as app user
+# Permission test: write to /harness/generic-python-docker/test-results as app user during the build
+RUN touch /harness/generic-python-docker/test-results/test_permission_file.txt && \
+    echo "Testing permissions: app user can write to test-results" > /harness/generic-python-docker/test-results/test_permission_file.txt && \
+    ls -l /harness/generic-python-docker/test-results
+
+# Switch to non-root user
 USER app
-RUN touch /harness/generic-python-docker/test-results/results.xml && \
-    echo "Permission check: writing to results.xml successful" > /harness/generic-python-docker/test-results/results.xml
 
 # Set entrypoint to run pytest with appropriate options
 ENTRYPOINT ["pytest", "--rootdir=/harness/generic-python-docker", "/harness/generic-python-docker/tests", "--junitxml=/harness/generic-python-docker/test-results/results.xml"]
