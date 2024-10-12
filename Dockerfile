@@ -59,14 +59,10 @@ RUN pip install -e ${HOME}/${APP_NAME}
 RUN find ${HOME} -name "__pycache__" -exec rm -rf {} + || true
 RUN find ${HOME} -name "*.pyc" -exec rm -f {} + || true
 
-# Step 12: Confirm write access to /harness/generic-python-docker/test-results as app user
-RUN touch /harness/generic-python-docker/test-results/permission_check.txt && \
-    chown app:app /harness/generic-python-docker/test-results/permission_check.txt && \
-    ls -ld /harness/generic-python-docker/test-results && \
-    ls -l /harness/generic-python-docker/test-results/
-
-# Step 13: Switch to non-root user for final runtime
+# Final permission check: confirm write access to /harness/generic-python-docker/test-results as app user
 USER app
+RUN touch /harness/generic-python-docker/test-results/results.xml && \
+    echo "Permission check: writing to results.xml successful" > /harness/generic-python-docker/test-results/results.xml
 
-# Step 14: Set entrypoint to run pytest with appropriate options
+# Set entrypoint to run pytest with appropriate options
 ENTRYPOINT ["pytest", "--rootdir=/harness/generic-python-docker", "/harness/generic-python-docker/tests", "--junitxml=/harness/generic-python-docker/test-results/results.xml"]
