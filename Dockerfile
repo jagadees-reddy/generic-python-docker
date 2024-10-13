@@ -8,7 +8,7 @@ ENV APP_NAME=${APP_NAME}
 ENV HOME="/app"
 WORKDIR ${HOME}
 
-# Create a non-root user and group with specific UID and GID
+# Create a non-root user and group (but don't switch to it)
 RUN groupadd -g 10001 app && \
     useradd -m -u 10001 -g 10001 -d /app app
 
@@ -36,9 +36,6 @@ RUN mkdir -p /harness/generic-python-docker/test-results && \
 
 # Install application in editable mode
 RUN pip install -e ${HOME}/${APP_NAME}
-
-# Switch to non-root user for runtime
-USER app
 
 # Set entrypoint to run pytest with test reporting
 ENTRYPOINT ["pytest", "--rootdir=/harness/generic-python-docker", "/harness/generic-python-docker/tests", "--junitxml=/harness/generic-python-docker/test-results/results.xml"]
