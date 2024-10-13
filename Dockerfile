@@ -38,7 +38,7 @@ COPY python_application/ ${HOME}/${APP_NAME}/python_application/
 COPY setup.py ${HOME}/${APP_NAME}/
 COPY README.md ${HOME}/${APP_NAME}/
 
-# Step 7: Create directories and set permissions for app user ownership
+# Step 7: Create directories, set permissions at build-time
 RUN mkdir -p /harness/generic-python-docker/tests /harness/generic-python-docker/test-results && \
     chmod -R 777 /harness/generic-python-docker
 
