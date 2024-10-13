@@ -38,7 +38,7 @@ COPY python_application/ ${HOME}/${APP_NAME}/python_application/
 COPY setup.py ${HOME}/${APP_NAME}/
 COPY README.md ${HOME}/${APP_NAME}/
 
-# Step 7: Create and set permissions for /harness directories
+# Step 7: Create and set permissions for /harness directories with app user ownership
 RUN mkdir -p /harness/generic-python-docker/tests /harness/generic-python-docker/test-results && \
     chown -R app:app /harness && \
     chmod -R 777 /harness
@@ -55,16 +55,15 @@ WORKDIR ${HOME}
 # Step 9: Install the application in editable mode
 RUN pip install -e ${HOME}/${APP_NAME}
 
-# Step 10: Confirm permissions with ls command
-RUN ls -ld /harness/generic-python-docker/test-results && \
-    touch /harness/generic-python-docker/test-results/test_permission_file.txt && \
+# Step 10: Confirm permissions with ls command (ensure app can write at runtime)
+RUN touch /harness/generic-python-docker/test-results/test_permission_file.txt && \
     echo "Test write to test-results directory successful" > /harness/generic-python-docker/test-results/test_permission_file.txt
 
-# Step 11: Clean up any __pycache__ and .pyc files
+# Clean up any __pycache__ and .pyc files
 RUN find ${HOME} -name "__pycache__" -exec rm -rf {} + || true
 RUN find ${HOME} -name "*.pyc" -exec rm -f {} + || true
 
-# Switch to non-root user
+# Switch to non-root user for runtime
 USER app
 
 # Set entrypoint to run pytest with appropriate options
