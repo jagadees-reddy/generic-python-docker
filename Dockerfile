@@ -46,23 +46,23 @@ RUN mkdir -p /harness/generic-python-docker/tests /harness/generic-python-docker
 # Step 8: Copy the tests to the correct directory
 COPY tests/ /harness/generic-python-docker/tests/
 
-# Step 9: Set environment variables and working directory
+# Set environment variables and working directory
 ENV PYTHONPATH="${PYTHONPATH}:${HOME}/${APP_NAME}"
 ENV PATH $PATH:${HOME}/${APP_NAME}/bin
 
 WORKDIR ${HOME}
 
-# Step 10: Install the application in editable mode
+# Step 9: Install the application in editable mode
 RUN pip install -e ${HOME}/${APP_NAME}
+
+# Step 10: Confirm permissions with ls command
+RUN ls -ld /harness/generic-python-docker/test-results && \
+    touch /harness/generic-python-docker/test-results/test_permission_file.txt && \
+    echo "Test write to test-results directory successful" > /harness/generic-python-docker/test-results/test_permission_file.txt
 
 # Step 11: Clean up any __pycache__ and .pyc files
 RUN find ${HOME} -name "__pycache__" -exec rm -rf {} + || true
 RUN find ${HOME} -name "*.pyc" -exec rm -f {} + || true
-
-# Permission test: write to /harness/generic-python-docker/test-results as app user during the build
-RUN touch /harness/generic-python-docker/test-results/test_permission_file.txt && \
-    echo "Testing permissions: app user can write to test-results" > /harness/generic-python-docker/test-results/test_permission_file.txt && \
-    ls -l /harness/generic-python-docker/test-results
 
 # Switch to non-root user
 USER app
